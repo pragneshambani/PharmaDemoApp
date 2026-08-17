@@ -4,7 +4,7 @@ namespace MyConsoleApp.Server.Repositories;
 
 public interface ISaleRepository
 {
-    Task<IEnumerable<SaleRecord>> GetAllAsync();
+    Task<IEnumerable<SaleRecord>> GetAllAsync(string? sortBy = null, bool isAscending = true);
     Task<SaleRecord?> GetByIdAsync(Guid id);
     Task<SaleRecord> AddSaleAsync(Guid medicineId, int quantitySold);
 }

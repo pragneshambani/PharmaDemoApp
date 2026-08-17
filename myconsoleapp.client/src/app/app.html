@@ -29,16 +29,31 @@
     <table class="medicine-table">
       <thead>
         <tr>
-          <th>Full Name</th>
-          <th>Brand</th>
-          <th>Expiry Date</th>
-          <th>Quantity in Stock</th>
-          <th>Price ($)</th>
+          <th (click)="toggleSort('fullName')" class="sortable">Full Name {{ getSortIcon('fullName') }}</th>
+          <th (click)="toggleSort('brand')" class="sortable">Brand {{ getSortIcon('brand') }}</th>
+          <th (click)="toggleSort('expiryDate')" class="sortable">Expiry Date {{ getSortIcon('expiryDate') }}</th>
+          <th (click)="toggleSort('quantity')" class="sortable">Quantity in Stock {{ getSortIcon('quantity') }}</th>
+          <th (click)="toggleSort('price')" class="sortable">Price ($) {{ getSortIcon('price') }}</th>
           <th>Status</th>
+        </tr>
+        <tr class="filter-row">
+          <td><input type="text" [(ngModel)]="columnFilters.fullName" placeholder="Filter Name..." class="column-filter-input" /></td>
+          <td><input type="text" [(ngModel)]="columnFilters.brand" placeholder="Filter Brand..." class="column-filter-input" /></td>
+          <td><input type="text" [(ngModel)]="columnFilters.expiryDate" placeholder="Filter Date..." class="column-filter-input" /></td>
+          <td><input type="text" [(ngModel)]="columnFilters.quantity" placeholder="Filter Qty..." class="column-filter-input" /></td>
+          <td><input type="text" [(ngModel)]="columnFilters.price" placeholder="Filter Price..." class="column-filter-input" /></td>
+          <td>
+            <select [(ngModel)]="columnFilters.status" class="column-filter-input">
+              <option value="">All Statuses</option>
+              <option value="expiring">Expiring Soon</option>
+              <option value="low">Low Stock</option>
+              <option value="ok">OK</option>
+            </select>
+          </td>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let m of medicines"
+        <tr *ngFor="let m of filteredMedicines"
             [class.row-expiring]="isExpiringSoon(m.expiryDate)"
             [class.row-low-stock]="!isExpiringSoon(m.expiryDate) && isLowStock(m.quantity)">
           <td><strong>{{ m.fullName }}</strong></td>
@@ -132,15 +147,22 @@
     <table class="medicine-table">
       <thead>
         <tr>
-          <th>Sale Date</th>
-          <th>Medicine Name</th>
-          <th>Qty Sold</th>
-          <th>Unit Price</th>
-          <th>Total Amount</th>
+          <th (click)="toggleSalesSort('saleDate')" class="sortable">Sale Date {{ getSalesSortIcon('saleDate') }}</th>
+          <th (click)="toggleSalesSort('medicineName')" class="sortable">Medicine Name {{ getSalesSortIcon('medicineName') }}</th>
+          <th (click)="toggleSalesSort('quantitySold')" class="sortable">Qty Sold {{ getSalesSortIcon('quantitySold') }}</th>
+          <th (click)="toggleSalesSort('unitPrice')" class="sortable">Unit Price {{ getSalesSortIcon('unitPrice') }}</th>
+          <th (click)="toggleSalesSort('totalAmount')" class="sortable">Total Amount {{ getSalesSortIcon('totalAmount') }}</th>
+        </tr>
+        <tr class="filter-row">
+          <td><input type="text" [(ngModel)]="salesColumnFilters.saleDate" placeholder="Filter Date..." class="column-filter-input" /></td>
+          <td><input type="text" [(ngModel)]="salesColumnFilters.medicineName" placeholder="Filter Medicine..." class="column-filter-input" /></td>
+          <td><input type="text" [(ngModel)]="salesColumnFilters.quantitySold" placeholder="Filter Qty..." class="column-filter-input" /></td>
+          <td><input type="text" [(ngModel)]="salesColumnFilters.unitPrice" placeholder="Filter Unit Price..." class="column-filter-input" /></td>
+          <td><input type="text" [(ngModel)]="salesColumnFilters.totalAmount" placeholder="Filter Total..." class="column-filter-input" /></td>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let s of sales">
+        <tr *ngFor="let s of filteredSales">
           <td>{{ s.saleDate | date:'yyyy-MM-dd HH:mm' }}</td>
           <td>{{ s.medicineName }}</td>
           <td>{{ s.quantitySold }}</td>

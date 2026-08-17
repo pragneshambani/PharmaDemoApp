@@ -32,7 +32,7 @@ Target area for this run: $ARGUMENTS (if empty, run the full end-to-end scaffold
      `IMedicineRepository`/`ISaleRepository`, JSON-backed implementations, controllers,
      Swagger setup, and validation.
    - Use the **frontend-spa-agent** for anything under `/src/Web/wwwroot` and
-     `_Layout.cshtml` — grid, search/sort/paging, add/update/delete forms, nav menu,
+     `_Layout.cshtml` — grid, search/sort/paging across all list views (Medicine Inventory and Sales Records), add/update/delete forms, nav menu,
      shared `site.css`.
    - Use the **qa-swagger-agent** after API or UI changes to verify: Swagger renders
      for every controller, the repository swap works with zero controller changes,

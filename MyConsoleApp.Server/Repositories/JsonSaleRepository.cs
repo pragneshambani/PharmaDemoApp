@@ -16,6 +16,50 @@ public class JsonSaleRepository : ISaleRepository
         var dataFolder = Path.Combine(env.ContentRootPath, "App_Data");
         Directory.CreateDirectory(dataFolder);
         _salesFilePath = Path.Combine(dataFolder, "sales.json");
+
+        if (!File.Exists(_salesFilePath))
+        {
+            SeedInitialData();
+        }
+    }
+
+    private void SeedInitialData()
+    {
+        var initial = new List<SaleRecord>
+        {
+            new()
+            {
+                Id = Guid.NewGuid(),
+                MedicineId = Guid.NewGuid(),
+                MedicineName = "Amoxicillin 500mg",
+                QuantitySold = 10,
+                UnitPrice = 12.50m,
+                TotalAmount = 125.00m,
+                SaleDate = DateTime.UtcNow.AddDays(-2)
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                MedicineId = Guid.NewGuid(),
+                MedicineName = "Paracetamol 500mg",
+                QuantitySold = 15,
+                UnitPrice = 4.99m,
+                TotalAmount = 74.85m,
+                SaleDate = DateTime.UtcNow.AddDays(-1)
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                MedicineId = Guid.NewGuid(),
+                MedicineName = "Atorvastatin 20mg",
+                QuantitySold = 5,
+                UnitPrice = 35.99m,
+                TotalAmount = 179.95m,
+                SaleDate = DateTime.UtcNow.AddHours(-3)
+            }
+        };
+
+        File.WriteAllText(_salesFilePath, JsonSerializer.Serialize(initial, _jsonOptions));
     }
 
     private async Task<List<SaleRecord>> ReadAllInternalAsync()
@@ -33,12 +77,25 @@ public class JsonSaleRepository : ISaleRepository
         File.Move(tempFile, _salesFilePath, overwrite: true);
     }
 
-    public async Task<IEnumerable<SaleRecord>> GetAllAsync()
+    public async Task<IEnumerable<SaleRecord>> GetAllAsync(string? sortBy = null, bool isAscending = true)
     {
         await _semaphore.WaitAsync();
         try
         {
-            return await ReadAllInternalAsync();
+            var items = await ReadAllInternalAsync();
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                items = sortBy.ToLowerInvariant() switch
+                {
+                    "saledate" => isAscending ? items.OrderBy(s => s.SaleDate).ToList() : items.OrderByDescending(s => s.SaleDate).ToList(),
+                    "medicinename" => isAscending ? items.OrderBy(s => s.MedicineName).ToList() : items.OrderByDescending(s => s.MedicineName).ToList(),
+                    "quantitysold" => isAscending ? items.OrderBy(s => s.QuantitySold).ToList() : items.OrderByDescending(s => s.QuantitySold).ToList(),
+                    "unitprice" => isAscending ? items.OrderBy(s => s.UnitPrice).ToList() : items.OrderByDescending(s => s.UnitPrice).ToList(),
+                    "totalamount" => isAscending ? items.OrderBy(s => s.TotalAmount).ToList() : items.OrderByDescending(s => s.TotalAmount).ToList(),
+                    _ => items
+                };
+            }
+            return items;
         }
         finally
         {

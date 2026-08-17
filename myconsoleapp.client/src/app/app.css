@@ -87,6 +87,37 @@
   background-color: #f1f3f5;
 }
 
+.medicine-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+
+.medicine-table th.sortable:hover {
+  background-color: #0056b3;
+  color: white;
+}
+
+.filter-row td {
+  padding: 6px 8px;
+  background-color: #f8f9fa;
+}
+
+.column-filter-input {
+  width: 100%;
+  padding: 5px 8px;
+  font-size: 0.82rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.column-filter-input:focus {
+  outline: none;
+  border-color: #0056b3;
+  box-shadow: 0 0 3px rgba(0, 86, 179, 0.3);
+}
+
 /* Priority rule: Red for Expiry < 30 days */
 .row-expiring {
   background-color: #f8d7da !important;
