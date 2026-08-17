@@ -22,12 +22,12 @@ public class SalesController : ControllerBase
     }
 
     /// <summary>
-    /// Gets all recorded sales.
+    /// Gets all recorded sales with optional column sorting.
     /// </summary>
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<SaleRecord>>> GetAll()
+    public async Task<ActionResult<IEnumerable<SaleRecord>>> GetAll([FromQuery] string? sortBy = null, [FromQuery] bool isAscending = true)
     {
-        var sales = await _saleRepository.GetAllAsync();
+        var sales = await _saleRepository.GetAllAsync(sortBy, isAscending);
         return Ok(sales);
     }
 

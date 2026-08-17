@@ -97,6 +97,9 @@ never mutate stock directly from the controller.
   fields (FullName, Brand, and optionally Notes) via the `/search` API endpoint.
 - Medicine List page adds its own **field-level** filter row (one input per column)
   in addition to the shared top search.
+- **Universal Column Sorting & Real-Time Updates**:
+  - **All list views** across all pages (Medicine Inventory grid AND Sales Records history list) must support interactive column sorting (clicking table headers toggles asc/desc via `sortBy` and `isAscending` parameters).
+  - Any data modification action (adding a medicine, recording a sale) must automatically update and refresh all affected list views across all pages without requiring a full manual browser reload.
 - Grid supports column sort (click header, toggles asc/desc) and server-side paging
   (page + pageSize params); avoid loading the entire dataset client-side once it grows.
 - Row coloring is applied via CSS classes (`.row-expiring`, `.row-low-stock`) toggled

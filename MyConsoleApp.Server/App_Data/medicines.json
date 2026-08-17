@@ -1,0 +1,92 @@
+[
+  {
+    "Id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+    "FullName": "Amoxicillin 500mg",
+    "Notes": "Broad-spectrum antibiotic. Take after meals.",
+    "ExpiryDate": "2026-05-18T00:00:00",
+    "Quantity": 50,
+    "Price": 12.50,
+    "Brand": "Pfizer"
+  },
+  {
+    "Id": "b2c3d4e5-f6a7-8b9c-0d1e-2f3a4b5c6d7e",
+    "FullName": "Paracetamol 500mg",
+    "Notes": "Analgesic \u0026 antipyretic. Low stock warning test.",
+    "ExpiryDate": "2026-09-01T00:00:00",
+    "Quantity": 5,
+    "Price": 4.99,
+    "Brand": "GSK"
+  },
+  {
+    "Id": "c3d4e5f6-a7b8-9c0d-1e2f-3a4b5c6d7e8f",
+    "FullName": "Ibuprofen 400mg",
+    "Notes": "NSAID pain reliever. Expiring soon (\u003C30 days).",
+    "ExpiryDate": "2026-03-02T00:00:00",
+    "Quantity": 25,
+    "Price": 8.75,
+    "Brand": "Bayer"
+  },
+  {
+    "Id": "d4e5f6a7-b89c-0d1e-2f3a-4b5c6d7e8f9a",
+    "FullName": "Cough Syrup 100ml",
+    "Notes": "Expectorant. Both expiring soon AND low stock.",
+    "ExpiryDate": "2026-02-27T00:00:00",
+    "Quantity": 4,
+    "Price": 15.00,
+    "Brand": "Novartis"
+  },
+  {
+    "Id": "e5f6a7b8-9c0d-1e2f-3a4b-5c6d7e8f9a0b",
+    "FullName": "Cetirizine 10mg",
+    "Notes": "Antihistamine for allergy relief.",
+    "ExpiryDate": "2027-02-17T00:00:00",
+    "Quantity": 120,
+    "Price": 6.25,
+    "Brand": "AstraZeneca"
+  },
+  {
+    "Id": "f6a7b89c-0d1e-2f3a-4b5c-6d7e8f9a0b1c",
+    "FullName": "Metformin 850mg",
+    "Notes": "Type 2 Diabetes management. Low stock.",
+    "ExpiryDate": "2026-08-15T00:00:00",
+    "Quantity": 8,
+    "Price": 18.40,
+    "Brand": "Merck"
+  },
+  {
+    "Id": "a7b89c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d",
+    "FullName": "Omeprazole 20mg",
+    "Notes": "Proton pump inhibitor for acid reflux. Expiring in 5 days.",
+    "ExpiryDate": "2026-02-22T00:00:00",
+    "Quantity": 45,
+    "Price": 22.00,
+    "Brand": "Takeda"
+  },
+  {
+    "Id": "b89c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e",
+    "FullName": "Azithromycin 250mg",
+    "Notes": "Macrolide antibiotic. Out of stock.",
+    "ExpiryDate": "2026-04-18T00:00:00",
+    "Quantity": 0,
+    "Price": 28.50,
+    "Brand": "Sandoz"
+  },
+  {
+    "Id": "c90d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f",
+    "FullName": "Atorvastatin 20mg",
+    "Notes": "Statin for cholesterol management.",
+    "ExpiryDate": "2027-03-25T00:00:00",
+    "Quantity": 60,
+    "Price": 35.99,
+    "Brand": "Viatris"
+  },
+  {
+    "Id": "d0e1f2a3-b4c5-6d7e-8f9a-0b1c2d3e4f5a",
+    "FullName": "Loratadine 10mg",
+    "Notes": "24-hour non-drowsy allergy medicine.",
+    "ExpiryDate": "2026-02-25T00:00:00",
+    "Quantity": 2,
+    "Price": 9.99,
+    "Brand": "Sanofi"
+  }
+]

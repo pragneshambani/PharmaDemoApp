@@ -25,10 +25,16 @@ public class JsonMedicineRepository : IMedicineRepository
     {
         var initial = new List<Medicine>
         {
-            new() { Id = Guid.NewGuid(), FullName = "Amoxicillin 500mg", Brand = "Pfizer", Quantity = 50, Price = 12.50m, ExpiryDate = DateTime.Today.AddDays(90), Notes = "Take with food" },
-            new() { Id = Guid.NewGuid(), FullName = "Paracetamol 500mg", Brand = "GSK", Quantity = 5, Price = 4.99m, ExpiryDate = DateTime.Today.AddDays(200), Notes = "Pain reliever" },
-            new() { Id = Guid.NewGuid(), FullName = "Ibuprofen 400mg", Brand = "Bayer", Quantity = 25, Price = 8.75m, ExpiryDate = DateTime.Today.AddDays(15), Notes = "Anti-inflammatory" },
-            new() { Id = Guid.NewGuid(), FullName = "Cough Syrup 100ml", Brand = "Novartis", Quantity = 4, Price = 15.00m, ExpiryDate = DateTime.Today.AddDays(10), Notes = "For dry cough" }
+            new() { Id = Guid.NewGuid(), FullName = "Amoxicillin 500mg", Brand = "Pfizer", Quantity = 50, Price = 12.50m, ExpiryDate = DateTime.Today.AddDays(90), Notes = "Broad-spectrum antibiotic. Take after meals." },
+            new() { Id = Guid.NewGuid(), FullName = "Paracetamol 500mg", Brand = "GSK", Quantity = 5, Price = 4.99m, ExpiryDate = DateTime.Today.AddDays(200), Notes = "Analgesic & antipyretic. Low stock warning test." },
+            new() { Id = Guid.NewGuid(), FullName = "Ibuprofen 400mg", Brand = "Bayer", Quantity = 25, Price = 8.75m, ExpiryDate = DateTime.Today.AddDays(15), Notes = "NSAID pain reliever. Expiring soon (<30 days)." },
+            new() { Id = Guid.NewGuid(), FullName = "Cough Syrup 100ml", Brand = "Novartis", Quantity = 4, Price = 15.00m, ExpiryDate = DateTime.Today.AddDays(10), Notes = "Expectorant. Both expiring soon AND low stock." },
+            new() { Id = Guid.NewGuid(), FullName = "Cetirizine 10mg", Brand = "AstraZeneca", Quantity = 120, Price = 6.25m, ExpiryDate = DateTime.Today.AddDays(365), Notes = "Antihistamine for allergy relief." },
+            new() { Id = Guid.NewGuid(), FullName = "Metformin 850mg", Brand = "Merck", Quantity = 8, Price = 18.40m, ExpiryDate = DateTime.Today.AddDays(180), Notes = "Type 2 Diabetes management. Low stock." },
+            new() { Id = Guid.NewGuid(), FullName = "Omeprazole 20mg", Brand = "Takeda", Quantity = 45, Price = 22.00m, ExpiryDate = DateTime.Today.AddDays(5), Notes = "Proton pump inhibitor for acid reflux. Expiring in 5 days." },
+            new() { Id = Guid.NewGuid(), FullName = "Azithromycin 250mg", Brand = "Sandoz", Quantity = 0, Price = 28.50m, ExpiryDate = DateTime.Today.AddDays(60), Notes = "Macrolide antibiotic. Out of stock." },
+            new() { Id = Guid.NewGuid(), FullName = "Atorvastatin 20mg", Brand = "Viatris", Quantity = 60, Price = 35.99m, ExpiryDate = DateTime.Today.AddDays(400), Notes = "Statin for cholesterol management." },
+            new() { Id = Guid.NewGuid(), FullName = "Loratadine 10mg", Brand = "Sanofi", Quantity = 2, Price = 9.99m, ExpiryDate = DateTime.Today.AddDays(8), Notes = "24-hour non-drowsy allergy medicine." }
         };
 
         File.WriteAllText(_filePath, JsonSerializer.Serialize(initial, _jsonOptions));
@@ -49,7 +55,7 @@ public class JsonMedicineRepository : IMedicineRepository
         File.Move(tempFile, _filePath, overwrite: true);
     }
 
-    public async Task<IEnumerable<Medicine>> GetAllAsync(string? searchTerm = null)
+    public async Task<IEnumerable<Medicine>> GetAllAsync(string? searchTerm = null, string? sortBy = null, bool isAscending = true)
     {
         await _semaphore.WaitAsync();
         try
@@ -64,6 +70,20 @@ public class JsonMedicineRepository : IMedicineRepository
                     m.Notes.ToLowerInvariant().Contains(term)
                 ).ToList();
             }
+
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                items = sortBy.ToLowerInvariant() switch
+                {
+                    "fullname" => isAscending ? items.OrderBy(m => m.FullName).ToList() : items.OrderByDescending(m => m.FullName).ToList(),
+                    "brand" => isAscending ? items.OrderBy(m => m.Brand).ToList() : items.OrderByDescending(m => m.Brand).ToList(),
+                    "expirydate" => isAscending ? items.OrderBy(m => m.ExpiryDate).ToList() : items.OrderByDescending(m => m.ExpiryDate).ToList(),
+                    "quantity" => isAscending ? items.OrderBy(m => m.Quantity).ToList() : items.OrderByDescending(m => m.Quantity).ToList(),
+                    "price" => isAscending ? items.OrderBy(m => m.Price).ToList() : items.OrderByDescending(m => m.Price).ToList(),
+                    _ => items
+                };
+            }
+
             return items;
         }
         finally
