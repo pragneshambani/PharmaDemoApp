@@ -4,7 +4,7 @@ namespace MyConsoleApp.Server.Repositories;
 
 public interface IMedicineRepository
 {
-    Task<IEnumerable<Medicine>> GetAllAsync(string? searchTerm = null);
+    Task<IEnumerable<Medicine>> GetAllAsync(string? searchTerm = null, string? sortBy = null, bool isAscending = true);
     Task<Medicine?> GetByIdAsync(Guid id);
     Task<Medicine> AddAsync(Medicine medicine);
     Task<bool> UpdateAsync(Medicine medicine);

@@ -16,12 +16,15 @@ public class MedicinesController : ControllerBase
     }
 
     /// <summary>
-    /// Gets available medicines with optional search term.
+    /// Gets available medicines with optional search term and column sorting.
     /// </summary>
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Medicine>>> GetAll([FromQuery] string? search)
+    public async Task<ActionResult<IEnumerable<Medicine>>> GetAll(
+        [FromQuery] string? search,
+        [FromQuery] string? sortBy = null,
+        [FromQuery] bool isAscending = true)
     {
-        var medicines = await _medicineRepository.GetAllAsync(search);
+        var medicines = await _medicineRepository.GetAllAsync(search, sortBy, isAscending);
         return Ok(medicines);
     }
 
