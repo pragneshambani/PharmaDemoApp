@@ -1,0 +1,156 @@
+<div class="pharmacy-container">
+  <header class="pharmacy-header">
+    <h1>ABC Pharmacy — Medicine Tracker</h1>
+    <nav class="nav-tabs">
+      <button [class.active]="activeTab === 'inventory'" (click)="activeTab = 'inventory'">Medicine Inventory</button>
+      <button [class.active]="activeTab === 'add'" (click)="activeTab = 'add'">Add New Medicine</button>
+      <button [class.active]="activeTab === 'sales'" (click)="activeTab = 'sales'">Sales Records</button>
+    </nav>
+  </header>
+
+  <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <!-- TAB 1: MEDICINE INVENTORY GRID -->
+  <main *ngIf="activeTab === 'inventory'" class="tab-content">
+    <div class="toolbar">
+      <input type="text"
+             [(ngModel)]="searchTerm"
+             (input)="onSearchChange()"
+             placeholder="Search by name, brand, or notes..."
+             class="search-input" />
+    </div>
+
+    <div class="legend">
+      <span class="legend-item red-legend">Red: Expiring within 30 days</span>
+      <span class="legend-item yellow-legend">Yellow: Low Stock (&lt; 10)</span>
+    </div>
+
+    <table class="medicine-table">
+      <thead>
+        <tr>
+          <th>Full Name</th>
+          <th>Brand</th>
+          <th>Expiry Date</th>
+          <th>Quantity in Stock</th>
+          <th>Price ($)</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let m of medicines"
+            [class.row-expiring]="isExpiringSoon(m.expiryDate)"
+            [class.row-low-stock]="!isExpiringSoon(m.expiryDate) && isLowStock(m.quantity)">
+          <td><strong>{{ m.fullName }}</strong></td>
+          <td>{{ m.brand }}</td>
+          <td>{{ m.expiryDate | date:'yyyy-MM-dd' }}</td>
+          <td>
+            {{ m.quantity }}
+            <span *ngIf="isLowStock(m.quantity)" class="badge-low">Low Stock</span>
+          </td>
+          <td>{{ m.price | currency:'USD':'symbol':'1.2-2' }}</td>
+          <td>
+            <span *ngIf="isExpiringSoon(m.expiryDate)" class="status-badge status-expiring">Expiring Soon</span>
+            <span *ngIf="!isExpiringSoon(m.expiryDate) && isLowStock(m.quantity)" class="status-badge status-low">Low Stock</span>
+            <span *ngIf="!isExpiringSoon(m.expiryDate) && !isLowStock(m.quantity)" class="status-badge status-ok">OK</span>
+          </td>
+        </tr>
+        <tr *ngIf="medicines.length === 0">
+          <td colspan="6" class="no-records">No medicines found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  <!-- TAB 2: ADD MEDICINE FORM -->
+  <main *ngIf="activeTab === 'add'" class="tab-content form-card">
+    <h2>Add Medicine Details</h2>
+    <form (ngSubmit)="saveMedicine()">
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" [(ngModel)]="newMedicine.fullName" name="fullName" required class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label>Brand *</label>
+        <input type="text" [(ngModel)]="newMedicine.brand" name="brand" required class="form-control" />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Quantity in Stock *</label>
+          <input type="number" [(ngModel)]="newMedicine.quantity" name="quantity" min="0" required class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label>Price ($) *</label>
+          <input type="number" step="0.01" [(ngModel)]="newMedicine.price" name="price" min="0" required class="form-control" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Expiry Date *</label>
+        <input type="date" [(ngModel)]="newMedicine.expiryDate" name="expiryDate" required class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label>Notes</label>
+        <textarea [(ngModel)]="newMedicine.notes" name="notes" rows="3" class="form-control"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Save Medicine</button>
+    </form>
+  </main>
+
+  <!-- TAB 3: SALES RECORDS -->
+  <main *ngIf="activeTab === 'sales'" class="tab-content">
+    <div class="form-card sale-form">
+      <h2>Record Medicine Sale</h2>
+      <div class="form-row">
+        <div class="form-group flex-2">
+          <label>Select Medicine</label>
+          <select [(ngModel)]="selectedMedicineId" class="form-control">
+            <option value="">-- Choose Medicine --</option>
+            <option *ngFor="let m of medicines" [value]="m.id">
+              {{ m.fullName }} (Stock: {{ m.quantity }}, Price: {{ m.price | currency:'USD' }})
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group flex-1">
+          <label>Quantity Sold</label>
+          <input type="number" [(ngModel)]="saleQuantity" min="1" class="form-control" />
+        </div>
+
+        <div class="form-group button-align">
+          <button (click)="recordSale()" class="btn btn-success">Record Sale</button>
+        </div>
+      </div>
+    </div>
+
+    <h2>Sale History</h2>
+    <table class="medicine-table">
+      <thead>
+        <tr>
+          <th>Sale Date</th>
+          <th>Medicine Name</th>
+          <th>Qty Sold</th>
+          <th>Unit Price</th>
+          <th>Total Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of sales">
+          <td>{{ s.saleDate | date:'yyyy-MM-dd HH:mm' }}</td>
+          <td>{{ s.medicineName }}</td>
+          <td>{{ s.quantitySold }}</td>
+          <td>{{ s.unitPrice | currency:'USD':'symbol':'1.2-2' }}</td>
+          <td><strong>{{ s.totalAmount | currency:'USD':'symbol':'1.2-2' }}</strong></td>
+        </tr>
+        <tr *ngIf="sales.length === 0">
+          <td colspan="5" class="no-records">No sale records recorded yet.</td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+</div>

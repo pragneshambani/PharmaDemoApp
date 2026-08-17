@@ -1,0 +1,21 @@
+<Solution>
+  <Folder Name="/.claude/" />
+  <Folder Name="/.claude/agents/">
+    <File Path=".claude/agents/api-repository-agent.md" />
+    <File Path=".claude/agents/frontend-spa-agent.md" />
+    <File Path=".claude/agents/qa-swagger-agent.md" />
+  </Folder>
+  <Folder Name="/.claude/commands/">
+    <File Path=".claude/commands/scaffold-pharmacy-app.md" />
+  </Folder>
+  <Folder Name="/.claude/skills/" />
+  <Folder Name="/.claude/skills/pharmacy-medicine-tracker/">
+    <File Path=".claude/skills/pharmacy-medicine-tracker/SKILL.md" />
+  </Folder>
+  <Project Path="MyConsoleApp.AppHost/MyConsoleApp.AppHost.csproj" />
+  <Project Path="myconsoleapp.client/myconsoleapp.client.esproj">
+    <Build />
+  </Project>
+  <Project Path="MyConsoleApp.Server/MyConsoleApp.Server.csproj" />
+  <Project Path="MyConsoleApp.ServiceDefaults/MyConsoleApp.ServiceDefaults.csproj" />
+</Solution>
